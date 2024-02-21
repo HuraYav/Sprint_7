@@ -12,40 +12,38 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class TestLoginCourier {
     private ApiCourier apiCourier;
-
-    private CreateCourierData createCourierData;
-
     private LoginCourierData loginCourierData;
+    private LoginCourierData loginCourierDataDelete;
 
 
+    @Before
+    public void setUp() {
+        apiCourier = new ApiCourier();
+        CreateCourierData createCourierData = new CreateCourierData("HuraYavYandex", "jackychan", "Jacky");
+        apiCourier.create(createCourierData);
+        loginCourierDataDelete = new LoginCourierData("HuraYavYandex", "jackychan");
+    }
 
-@Before
-public void setUp() {
-    apiCourier = new ApiCourier();
-    createCourierData = new CreateCourierData("HuraYavYandex", "jackychan", "Jacky");
-    apiCourier.create(createCourierData);
-}
     @Test
     @DisplayName("Курьер может авторизоваться")
     public void loginCourier() {
         loginCourierData = new LoginCourierData("HuraYavYandex", "jackychan");
         ValidatableResponse response = apiCourier.login(loginCourierData);
         ExtractableResponse<Response> extractableResponse = response.extract();
-        apiCourier.delete(loginCourierData);
+
         assertEquals("Курьер не авторизован", extractableResponse.statusCode(), 200);
     }
+
     @Test
     @DisplayName("Система вернет ошибку если указать неправильный логин или пароль")
     public void loginCourierWithIncorrectPass() {
         loginCourierData = new LoginCourierData("HuraYavYandex", "jackychanh");
         ValidatableResponse response = apiCourier.login(loginCourierData);
-        apiCourier.delete(loginCourierData);
+
         response.statusCode(404).body("message", equalTo("Учетная запись не найдена"));
     }
 
@@ -54,7 +52,7 @@ public void setUp() {
     public void loginCourierWithoutPassword() {
         loginCourierData = new LoginCourierData("HuraYavYandex", "");
         ValidatableResponse response = apiCourier.login(loginCourierData);
-        apiCourier.delete(loginCourierData);
+
         response.statusCode(400).body("message", equalTo("Недостаточно данных для входа"));
     }
 
@@ -63,7 +61,7 @@ public void setUp() {
     public void loginCourierWithoutLogin() {
         loginCourierData = new LoginCourierData("", "jackychan");
         ValidatableResponse response = apiCourier.login(loginCourierData);
-        apiCourier.delete(loginCourierData);
+
         response.statusCode(400).body("message", equalTo("Недостаточно данных для входа"));
     }
 
@@ -72,7 +70,12 @@ public void setUp() {
     public void loginCourierByNotExistsLogin() {
         loginCourierData = new LoginCourierData("not_exists_login", "not_exists_pass");
         ValidatableResponse response = apiCourier.login(loginCourierData);
-        apiCourier.delete(loginCourierData);
+
         response.statusCode(404).body("message", equalTo("Учетная запись не найдена"));
+    }
+
+    @After
+    public void cleanUp() {
+        apiCourier.delete(loginCourierDataDelete);
     }
 }

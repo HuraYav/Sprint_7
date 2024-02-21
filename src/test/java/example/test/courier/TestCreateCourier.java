@@ -33,8 +33,7 @@ public class TestCreateCourier {
         loginCourierData = testCourierData.getLoginCourierData();
 
         ValidatableResponse response = apiCourier.create(createCourierData);
-        assertEquals("Курьер не cоздался", response.extract().statusCode(), 201);
-        assertEquals("Запрос не вернул ok", response.extract().body().jsonPath().get("ok"), true);
+        response.statusCode(201).body("ok", equalTo(true));
     }
 
     @Test
