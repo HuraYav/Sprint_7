@@ -9,10 +9,15 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 
 public class ApiCourier {
+    public static final String postLoginUrl = "/api/v1/courier/login";
+
+    public static final String postCreateUrl = "/api/v1/courier";
+    public static final String deleteUrl = "/api/v1/courier/%d";
+
     public ValidatableResponse login(LoginCourierData loginData) {
         return given().spec(BaseHttpClient.baseRequestSpec())
                 .body(loginData)
-                .post("/api/v1/courier/login")
+                .post(postLoginUrl)
                 .then()
                 .log().all();
     }
@@ -20,7 +25,7 @@ public class ApiCourier {
     public ValidatableResponse create(CreateCourierData createData) {
         return given().spec(BaseHttpClient.baseRequestSpec())
                 .body(createData)
-                .post("/api/v1/courier")
+                .post(postCreateUrl)
                 .then()
                 .log().all();
     }
@@ -32,7 +37,7 @@ public class ApiCourier {
         if (statusCode == 200) {
             given().spec(BaseHttpClient.baseRequestSpec()).delete(
                     String.format(
-                            "/api/v1/courier/%d",
+                            deleteUrl,
                             extractableLoginResponse.body().jsonPath().getInt("id")
                     )
             );

@@ -19,7 +19,7 @@ public class TestCreateOrderWithColors {
     private CreateOrderData createOrderData;
 
     public TestCreateOrderWithColors(String[] colors) {
-        colors = colors;
+        this.colors = colors;
     }
 
     @Parameterized.Parameters

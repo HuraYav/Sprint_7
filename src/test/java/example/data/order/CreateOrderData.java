@@ -1,23 +1,23 @@
 package example.data.order;
 
 public class CreateOrderData {
-    protected String firstName;
+    private String firstName;
 
-    protected String lastName;
+    private String lastName;
 
-    protected String address;
+    private String address;
 
-    protected String metroStation;
+    private String metroStation;
 
-    protected String phone;
+    private String phone;
 
-    protected int rentTime;
+    private int rentTime;
 
-    protected String deliveryDate;
+    private String deliveryDate;
 
-    protected String comment;
+    private String comment;
 
-    protected String[] color;
+    private String[] color;
 
     public CreateOrderData(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, String[] color) {
         this.firstName = firstName;

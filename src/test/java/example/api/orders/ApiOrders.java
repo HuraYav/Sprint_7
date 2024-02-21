@@ -6,17 +6,19 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 
 public class ApiOrders {
+    public static final String postCreateUrl = "/api/v1/orders";
+    public static final String getListUrl = "/api/v1/orders";
     public ValidatableResponse createOrder(CreateOrderData createOrderData) {
         return given().spec(BaseHttpClient.baseRequestSpec())
                 .body(createOrderData)
-                .post("/api/v1/orders")
+                .post(postCreateUrl)
                 .then()
                 .log().all();
     }
 
     public ValidatableResponse getList() {
         return given().spec(BaseHttpClient.baseRequestSpec())
-                .get("/api/v1/orders")
+                .get(getListUrl)
                 .then()
                 .log().all();
     }
